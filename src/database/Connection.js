@@ -8,7 +8,7 @@ export default async function conectar() {
       host: 'localhost',
       user: 'root',
       password: 'admin',
-      database: 'backend',
+      database: 'cadastro_politico',
       port: 3306,
       waitForConnections: true,
       connectionLimit: 20,
