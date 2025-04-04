@@ -1,0 +1,43 @@
+{
+  "name": "ppi-3tr-trabalhofinal",
+  "version": "1.0.0",
+  "description": "trabalho final da disciplina de programação para internet da faculdade UNOESTE, projeto MVC com back-end em Node.js e Front-end em JS/Bootstrap utilizando Fetch API. O banco de dados será MySQL. Versionamento pelo Git.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aldruin/ppi-trabalho-final.git"
+  },
+  "keywords": [
+    "backend",
+    "javascript",
+    "mvc",
+    "nodejs",
+    "js",
+    "bootstrap",
+    "fetch",
+    "mysql",
+    "front-end",
+    "fullstack",
+    "ppi",
+    "unoeste"
+  ],
+  "author": "aldruin bonfim de lima souza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aldruin/ppi-trabalho-final/issues"
+  },
+  "homepage": "https://github.com/aldruin/ppi-trabalho-final#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "express-static": "^1.2.6",
+    "mysql2": "^3.14.0"
+  }
+}
