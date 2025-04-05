@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 
-export default async function conectar() {
+export default async function connect() {
   if (global.poolConexoes) {
     return await global.poolConexoes.getConnection();
   } else {
