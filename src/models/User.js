@@ -15,4 +15,27 @@ export default class User{
     const newUser = await UserDAO.create(user);
     return newUser;
   }
+
+  static async findById(id){
+    const user = await UserDAO.findById(id);
+
+    return (user);
+  }
+
+  static async findByEmail(email){
+    const user = await UserDAO.findByEmail(email);
+
+    return (user);
+  }
+
+  static async update(id, name, email, password){
+    const user = new User(id, name, email, password);
+    const updatedUser = await UserDAO.update(user);
+    return updatedUser;
+  }
+
+  static async delete(id){
+    const deletedUser = await UserDAO.delete(id);
+    return deletedUser;
+  }
 }
