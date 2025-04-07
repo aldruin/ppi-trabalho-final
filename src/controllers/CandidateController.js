@@ -4,22 +4,39 @@ import Party from "../models/Party.js";
 export default class CandidateController {
   static async create(req, res, next) {
     try {
-      const { name, number, party_number } = req.body;
-
+      const {
+        name,
+        number,
+        party_number,
+        cpf,
+        titulo_eleitor,
+        endereco,
+        bairro,
+        cidade,
+        uf,
+        cep,
+        renda_mensal
+      } = req.body;
+  
       const party = await Party.findByNumber(party_number);
       if (!party) {
-        return res.status(400).json({
-          success: false,
-          message: 'Partido informado não existe.',
-        });
+        return res.status(400).json({ success: false, message: 'Partido informado não existe.' });
       }
-
-      const candidate = await Candidate.create(name, number, party.id);
-
-      if (!candidate) {
-        return next();
-      }
-
+  
+      const candidate = await Candidate.create(
+        name,
+        number,
+        party.id,
+        cpf,
+        titulo_eleitor,
+        endereco,
+        bairro,
+        cidade,
+        uf,
+        cep,
+        renda_mensal
+      );
+  
       return res.status(201).json({
         success: true,
         message: 'Candidato criado com sucesso.',
@@ -68,20 +85,45 @@ export default class CandidateController {
   static async update(req, res, next) {
     try {
       const id = parseInt(req.params.id, 10);
-      const { name, number, partyNumber } = req.body;
-
-      const party = await Party.findByNumber(partyNumber);
+      const {
+        name,
+        number,
+        party_number,
+        cpf,
+        titulo_eleitor,
+        endereco,
+        bairro,
+        cidade,
+        uf,
+        cep,
+        renda_mensal
+      } = req.body;
+  
+      const party = await Party.findByNumber(party_number);
       if (!party) {
         return res.status(404).json({
           success: false,
           message: "Partido com esse número não foi encontrado."
         });
       }
-
-      const updated = await Candidate.update(id, name, number, party.id);
-
+  
+      const updated = await Candidate.update(
+        id,
+        name,
+        number,
+        party.id,
+        cpf,
+        titulo_eleitor,
+        endereco,
+        bairro,
+        cidade,
+        uf,
+        cep,
+        renda_mensal
+      );
+  
       if (!updated) return next();
-
+  
       return res.status(200).json({
         success: true,
         message: "Candidato atualizado com sucesso."
