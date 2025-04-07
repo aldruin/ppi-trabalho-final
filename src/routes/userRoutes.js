@@ -5,6 +5,10 @@ import paginate from "../middlewares/paginate.js";
 const router = express.Router();
 
 router
-  .post("/user", UserController.create);
+  .get("/user", UserController.findById)
+  .post("/user", UserController.create)
+  .put("/user/:id", UserController.update)
+  .delete("/user/:id", UserController.delete);
+
 
   export default (router);
