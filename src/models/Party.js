@@ -30,6 +30,11 @@ export default class Party{
     );
   }
 
+  static async findByNumber(number) {
+    const party = await PartyDAO.findByNumber(number);
+    return party;
+  }
+  
   static async findById(id){
     const party = await PartyDAO.findByid(id);
 

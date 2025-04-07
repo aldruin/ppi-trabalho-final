@@ -22,6 +22,14 @@ export default class PartyDAO{
     return rows;
   }
 
+  static async findByNumber(number) {
+    const connection = await connect();
+    const sql = "SELECT * FROM party WHERE number = ?";
+    const [rows] = await connection.execute(sql, [number]);
+    await connection.release();
+    return rows.length ? rows[0] : null;
+  }
+
   static async findById(id){
     const connection = await connect();
     const sql = "SELECT * FROM user WHERE id = ?";

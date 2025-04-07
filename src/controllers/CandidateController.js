@@ -4,9 +4,9 @@ import Party from "../models/Party.js";
 export default class CandidateController {
   static async create(req, res, next) {
     try {
-      const { name, number, party_id } = req.body;
+      const { name, number, party_number } = req.body;
 
-      const party = await Party.findById(party_id);
+      const party = await Party.findByNumber(party_number);
       if (!party) {
         return res.status(400).json({
           success: false,
@@ -14,7 +14,7 @@ export default class CandidateController {
         });
       }
 
-      const candidate = await Candidate.create(name, number, party_id);
+      const candidate = await Candidate.create(name, number, party.id);
 
       if (!candidate) {
         return next();
@@ -68,28 +68,23 @@ export default class CandidateController {
   static async update(req, res, next) {
     try {
       const id = parseInt(req.params.id, 10);
-      const { name, number, party_id } = req.body;
+      const { name, number, partyNumber } = req.body;
 
-      if (party_id) {
-        const party = await Party.findById(party_id);
-        if (!party) {
-          return res.status(400).json({
-            success: false,
-            message: 'Partido informado não existe.',
-          });
-        }
+      const party = await Party.findByNumber(partyNumber);
+      if (!party) {
+        return res.status(404).json({
+          success: false,
+          message: "Partido com esse número não foi encontrado."
+        });
       }
 
-      const updatedCandidate = await Candidate.update(id, name, number, party_id);
+      const updated = await Candidate.update(id, name, number, party.id);
 
-      if (!updatedCandidate) {
-        return next();
-      }
+      if (!updated) return next();
 
       return res.status(200).json({
         success: true,
-        message: 'Candidato atualizado com sucesso.',
-        data: updatedCandidate,
+        message: "Candidato atualizado com sucesso."
       });
     } catch (error) {
       next(error);
