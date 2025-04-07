@@ -5,7 +5,7 @@ import paginate from "../middlewares/paginate.js";
 const router = express.Router();
 
 router
-  .get("/user", UserController.findById)
+  .get("/user/:id", UserController.findById)
   .post("/user", UserController.create)
   .put("/user/:id", UserController.update)
   .delete("/user/:id", UserController.delete);
