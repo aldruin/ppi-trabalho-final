@@ -39,7 +39,10 @@ export default class PartyController{
       const party = await Party.findById(id);
 
       if(!party){
-        return next();
+        return res.status(404).json({
+          success: false,
+          message: 'Partido não encontrado.'
+        })
       }
 
       return res.status(200).json({

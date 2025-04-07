@@ -31,7 +31,10 @@ export default class UserController{
       const user = await User.findById(id);
 
       if(!user){
-        return next();
+        return res.status(404).json({
+          success: false,
+          message: 'Usuário não encontrado.'
+        })
       }
 
       return res.status(200).json({
