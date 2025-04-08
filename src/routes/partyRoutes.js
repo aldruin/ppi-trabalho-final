@@ -5,10 +5,10 @@ import paginate from "../middlewares/paginate.js";
 const router = express.Router();
 
 router
-  .get("/party", PartyController.findAll)
-  .get("/party/:id", PartyController.findById)
-  .post("/party", PartyController.create)
-  .put("/party/:id", PartyController.update)
-  .delete("/party/:id", PartyController.delete);
+  .get("/api/party", PartyController.findAll)
+  .get("/api/party/:id", PartyController.findById)
+  .post("/api/party", PartyController.create)
+  .put("/api/party/:id", PartyController.update)
+  .delete("/api/party/:id", PartyController.delete);
 
   export default (router);

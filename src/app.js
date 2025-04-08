@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use(express.static('src/frontend/public'));
 
-app.use(autenticar, express.static('src/frontend/private'));
+app.use("/private", autenticar, express.static('src/frontend/private'));
 
 routes(app);
 
