@@ -1,0 +1,90 @@
+body {
+  background: linear-gradient(120deg, #1e3c72, #2a5298);
+  background-size: cover;
+  height: 100vh;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.login-box {
+  display: flex;
+  width: 850px;
+  max-width: 95%;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+}
+
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  font-size: 38px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1.5px;
+  text-align: center;
+  flex-direction: column;
+}
+
+.login-left span {
+  font-size: 44px;
+  margin-bottom: 10px;
+}
+
+.login-right {
+  flex: 1;
+  background-color: #ffffff;
+  padding: 50px;
+  color: #333;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #0d6efd;
+}
+
+.form-control {
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+  border-color: #0d6efd;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-radius: 12px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+.text-center a {
+  text-decoration: none;
+  color: #0d6efd;
+  font-weight: 500;
+}
+
+.text-center a:hover {
+  text-decoration: underline;
+}
