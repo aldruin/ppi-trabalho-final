@@ -1,5 +1,5 @@
 body {
-  background: linear-gradient(120deg, #1e3c72, #2a5298);
+  background: linear-gradient(120deg, #1e3c72, #2a529857);
   background-size: cover;
   height: 100vh;
   color: #fff;
@@ -23,7 +23,7 @@ body {
 
 .login-left {
   flex: 1;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(135deg, rgba(207, 206, 206, 0.925), rgba(255, 255, 255, 0.26));
   display: flex;
   align-items: center;
   justify-content: center;
