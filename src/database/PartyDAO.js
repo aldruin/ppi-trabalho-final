@@ -12,6 +12,7 @@ export default class PartyDAO{
       ];
       await connection.execute(sql, values);
       await connection.release();
+      return party;
   }
 
   static async findAll(){
@@ -32,7 +33,7 @@ export default class PartyDAO{
 
   static async findById(id){
     const connection = await connect();
-    const sql = "SELECT * FROM user WHERE id = ?";
+    const sql = "SELECT * FROM party WHERE id = ?";
     const [rows] = await connection.execute(sql, [id]);
 
     await connection.release();
