@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Gerenciar Partidos</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css">
@@ -26,7 +26,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/partidos.html">
+            <a class="nav-link active" href="/partidos.html">
               <i class="bi bi-people"></i> Partidos
             </a>
           </li>
@@ -34,35 +34,36 @@
       </nav>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-        <h2 class="mb-4">Resumo Geral</h2>
+        <h2 class="mb-4 text-white">Gerenciar Partidos</h2>
 
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="card card-dashboard text-center">
-              <div class="card-body">
-                <div class="card-icon mb-2"><i class="bi bi-people"></i></div>
-                <h5 class="card-title">Partidos</h5>
-                <p class="card-text">12 cadastrados</p>
-              </div>
-            </div>
+        <div class="table-container">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Lista de Partidos</h5>
+            <button class="btn btn-primary btn-custom">
+              <i class="bi bi-plus-circle"></i> Novo Partido
+            </button>
           </div>
-          <div class="col-md-4">
-            <div class="card card-dashboard text-center">
-              <div class="card-body">
-                <div class="card-icon mb-2"><i class="bi bi-person-badge"></i></div>
-                <h5 class="card-title">Candidatos</h5>
-                <p class="card-text">30 cadastrados</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card card-dashboard text-center">
-              <div class="card-body">
-                <div class="card-icon mb-2"><i class="bi bi-graph-up"></i></div>
-                <h5 class="card-title">Distribuição por Partido</h5>
-                <p class="card-text">Partido X: 10, Y: 12, Z: 8</p>
-              </div>
-            </div>
+          <div class="table-responsive">
+            <table class="table table-hover w-100 table-fixed">
+              <thead>
+                <tr>
+                  <th>Sigla</th>
+                  <th>Nome</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ABC</td>
+                  <td>Partido ABC</td>
+                  <td>
+                    <button class="btn-icon"><i class="bi bi-eye"></i></button>
+                    <button class="btn-icon"><i class="bi bi-pencil"></i></button>
+                    <button class="btn-icon"><i class="bi bi-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
