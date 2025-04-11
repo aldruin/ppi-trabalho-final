@@ -13,7 +13,7 @@ export default class User{
     const user = new User(null, name, email, password);
 
     const newUser = await UserDAO.create(user);
-    return newUser;
+    return true;
   }
 
   static async findById(id){

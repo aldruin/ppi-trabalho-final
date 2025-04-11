@@ -16,20 +16,22 @@
         <hr class="sidebar-divider">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" href="/index.html">
+            <a class="nav-link" href="/private/index.html">
               <i class="bi bi-house-door"></i> Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/candidatos.html">
+            <a class="nav-link" href="/private/candidatos.html">
               <i class="bi bi-person-badge"></i> Candidatos
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/partidos.html">
+            <a class="nav-link" href="/private/partidos.html">
               <i class="bi bi-people"></i> Partidos
             </a>
           </li>
+          <br>
+          <a href="/logout" class="btn btn-danger">Sair</a>
         </ul>
       </nav>
 
@@ -37,30 +39,21 @@
         <h2 class="mb-4">Resumo Geral</h2>
 
         <div class="row g-4">
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="card card-dashboard text-center">
               <div class="card-body">
                 <div class="card-icon mb-2"><i class="bi bi-people"></i></div>
                 <h5 class="card-title">Partidos</h5>
-                <p class="card-text">12 cadastrados</p>
+                <p class="card-text" id="qtdPartidos">Carregando...</p>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="card card-dashboard text-center">
               <div class="card-body">
                 <div class="card-icon mb-2"><i class="bi bi-person-badge"></i></div>
                 <h5 class="card-title">Candidatos</h5>
-                <p class="card-text">30 cadastrados</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card card-dashboard text-center">
-              <div class="card-body">
-                <div class="card-icon mb-2"><i class="bi bi-graph-up"></i></div>
-                <h5 class="card-title">Distribuição por Partido</h5>
-                <p class="card-text">Partido X: 10, Y: 12, Z: 8</p>
+                <p class="card-text" id="qtdCandidatos">Carregando...</p>
               </div>
             </div>
           </div>
@@ -68,5 +61,6 @@
       </main>
     </div>
   </div>
+  <script src="./js/index.js"></script>
 </body>
 </html>

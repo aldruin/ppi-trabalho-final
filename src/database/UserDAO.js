@@ -13,6 +13,7 @@ export default class UserDAO{
       ];
       await connection.execute(sql, values);
       await connection.release();
+      return true;
   }
 
   static async findById(id){
