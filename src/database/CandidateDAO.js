@@ -5,7 +5,7 @@ export default class CandidateDAO {
   static async create(candidate) {
     const connection = await connect();
     try {
-      const party = await PartyDAO.findById(candidate.party_id);
+      const party = await PartyDAO.findById(candidate.party.id);
       if (!party) throw new Error("Partido não encontrado.");
   
       const sql = `
@@ -16,7 +16,7 @@ export default class CandidateDAO {
       const values = [
         candidate.name,
         candidate.number,
-        candidate.party_id,
+        candidate.party.id,
         candidate.cpf,
         candidate.titulo_eleitor,
         candidate.endereco,
@@ -38,24 +38,25 @@ export default class CandidateDAO {
     const connection = await connect();
     const sql = `
       SELECT 
-        c.id,
-        c.name,
-        c.number,
-        c.cpf,
-        c.titulo_eleitor,
-        c.endereco,
-        c.bairro,
-        c.cidade,
-        c.uf,
-        c.cep,
-        c.renda_mensal,
-        p.name AS party_name, 
-        p.initials AS party_initials, 
-        p.number AS party_number
+      c.id,
+      c.name,
+      c.number,
+      c.cpf,
+      c.titulo_eleitor,
+      c.endereco,
+      c.bairro,
+      c.cidade,
+      c.uf,
+      c.cep,
+      c.renda_mensal,
+      p.id AS party_id,
+      p.name AS party_name,
+      p.initials AS party_initials,
+      p.number AS party_number
       FROM candidate c
       JOIN party p ON c.party_id = p.id
       ORDER BY c.id
-    `;
+      `;
     const [rows] = await connection.execute(sql);
     await connection.release();
     return rows;
@@ -79,12 +80,8 @@ export default class CandidateDAO {
 
   static async update(candidate) {
     const connection = await connect();
-    try {
       const [existingRows] = await connection.execute("SELECT * FROM candidate WHERE id = ?", [candidate.id]);
       if (!existingRows.length) return null;
-  
-      const party = await PartyDAO.findById(candidate.party_id);
-      if (!party) throw new Error("Partido não encontrado.");
   
       const sql = `
         UPDATE candidate
@@ -94,7 +91,7 @@ export default class CandidateDAO {
       const values = [
         candidate.name,
         candidate.number,
-        candidate.party_id,
+        candidate.party?.id || candidate.party_id,
         candidate.cpf,
         candidate.titulo_eleitor,
         candidate.endereco,
@@ -105,13 +102,13 @@ export default class CandidateDAO {
         candidate.renda_mensal,
         candidate.id
       ];
+      console.log("VALUES SENDOS PASSADOS:", values);
+
   
       await connection.execute(sql, values);
-      return true;
-    } finally {
       await connection.release();
+      return values;
     }
-  }
 
   static async delete(id) {
     const connection = await connect();

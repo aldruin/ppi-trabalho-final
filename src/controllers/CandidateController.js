@@ -122,14 +122,19 @@ export default class CandidateController {
         renda_mensal
       );
   
-      if (!updated) return next();
+      if (!updated) {
+        return res.status(404).json({
+          success: false,
+          message: "Candidato não encontrado para atualizar."
+        });
+      }
   
       return res.status(200).json({
         success: true,
         message: "Candidato atualizado com sucesso."
       });
     } catch (error) {
-      next(error);
+      console.log(error);
     }
   }
 

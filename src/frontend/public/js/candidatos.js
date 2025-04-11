@@ -1,111 +1,204 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const tbody = document.querySelector("tbody");
-  const thead = document.querySelector("thead");
-  const pagination = document.querySelector("#pagination");
+  const tbody = document.querySelector("#tbody-candidatos");
+  const formCriar = document.querySelector("#form-criar-candidato");
+  const formEditar = document.querySelector("#form-editar-candidato");
+  const selectPartidoCriar = formCriar.querySelector("select[name='party_id']");
+  const selectPartidoEditar = formEditar.querySelector("select[name='party_id']");
+  const modalEditar = new bootstrap.Modal(document.getElementById("modalEditarCandidato"));
+  const modalCriar = new bootstrap.Modal(document.getElementById("modalNovoCandidato"));
 
-  const itensPorPagina = 10;
-  let paginaAtual = 1;
   let listaCandidatos = [];
+  let listaPartidos = [];
 
-  const titulosColunas = {
-    id: "ID",
-    name: "Nome",
-    number: "Número",
-    cpf: "CPF",
-    titulo_eleitor: "Título de Eleitor",
-    endereco: "Endereço",
-    bairro: "Bairro",
-    cidade: "Cidade",
-    uf: "UF",
-    cep: "CEP",
-    renda_mensal: "Renda Mensal"
-  };
+  async function carregarPartidos() {
+    try {
+      const res = await fetch("http://localhost:3000/api/party");
+      const data = await res.json();
+      listaPartidos = data.partys || [];
+      preencherSelectPartidos(selectPartidoCriar);
+      preencherSelectPartidos(selectPartidoEditar);
+    } catch (err) {
+      console.error("Erro ao buscar partidos:", err);
+    }
+  }
+
+  function preencherSelectPartidos(select) {
+    select.innerHTML = '<option value="">Selecione o Partido</option>';
+    listaPartidos.forEach(partido => {
+      const option = document.createElement("option");
+      option.value = partido.id;
+      option.textContent = `${partido.number} - ${partido.initials} - ${partido.name}`;
+      select.appendChild(option);
+    });
+  }
 
   async function carregarCandidatos() {
     try {
-      const resposta = await fetch("http://localhost:3000/api/candidate");
-      if (!resposta.ok) throw new Error("Erro ao buscar candidatos.");
+      const res = await fetch("http://localhost:3000/api/candidate");
+      const data = await res.json();
+      listaCandidatos = data.candidates || [];
+      renderizarTabela();
+    } catch (err) {
+      console.error("Erro ao buscar candidatos:", err);
+    }
+  }
 
-      const dados = await resposta.json();
-      if (dados.success && Array.isArray(dados.candidates)) {
-        listaCandidatos = dados.candidates;
-        atualizarTabela();
-        atualizarPaginacao();
-      } else {
-        tbody.innerHTML = `<tr><td colspan="100%">Nenhum candidato encontrado.</td></tr>`;
+  let currentPage = 1;
+const itemsPerPage = 10;
+
+function renderizarTabela() {
+  const tbody = document.querySelector("#tbody-candidatos");
+  tbody.innerHTML = "";
+
+  const totalPages = Math.ceil(listaCandidatos.length / itemsPerPage);
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const candidatosPagina = listaCandidatos.slice(start, end);
+
+  if (candidatosPagina.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8">Nenhum candidato encontrado.</td></tr>`;
+    return;
+  }
+
+  candidatosPagina.forEach(candidato => {
+    const tr = document.createElement("tr");
+    const partidoNome = candidato.party
+      ? `${candidato.party.number} - ${candidato.party.initials} - ${candidato.party.name}`
+      : "N/A";
+
+    tr.innerHTML = `
+      <td>${candidato.name}</td>
+      <td>${candidato.number}</td>
+      <td>${partidoNome}</td>
+      <td>${candidato.cpf}</td>
+      <td>${candidato.titulo_eleitor}</td>
+      <td>${candidato.cidade}</td>
+      <td>${candidato.uf}</td>
+      <td>
+        <button class="btn-icon" onclick="editarCandidato(${candidato.id})"><i class="bi bi-pencil"></i></button>
+        <button class="btn-icon" onclick="excluirCandidato(${candidato.id})"><i class="bi bi-trash"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  renderizarPaginacao(totalPages);
+}
+
+function renderizarPaginacao(totalPages) {
+  let container = document.querySelector("#paginacao-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "paginacao-container";
+    container.className = "mt-3 d-flex justify-content-center gap-2";
+    document.querySelector("table").after(container);
+  }
+
+  container.innerHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.className = `btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'}`;
+    btn.addEventListener("click", () => {
+      currentPage = i;
+      renderizarTabela();
+    });
+    container.appendChild(btn);
+  }
+}
+
+  formCriar.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(formCriar);
+
+    const novoCandidato = Object.fromEntries(formData.entries());
+    novoCandidato.number = parseInt(novoCandidato.number);
+    novoCandidato.party_id = parseInt(novoCandidato.party_id);
+    novoCandidato.renda_mensal = parseFloat(novoCandidato.renda_mensal);
+    const partidoSelecionado = listaPartidos.find(p => p.id === novoCandidato.party_id);
+    novoCandidato.party_number = partidoSelecionado ? partidoSelecionado.number : null;
+
+    try {
+      const res = await fetch("http://localhost:3000/api/candidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoCandidato)
+      });
+
+      if (res.ok) {
+        formCriar.reset();
+        modalCriar.hide();
+        await carregarCandidatos();
       }
-    } catch (erro) {
-      console.error("Erro ao carregar candidatos:", erro);
-      tbody.innerHTML = `<tr><td colspan="100%">Erro ao carregar candidatos.</td></tr>`;
+    } catch (err) {
+      console.error("Erro ao criar candidato:", err);
     }
-  }
+  });
 
-  function atualizarTabela() {
-    thead.innerHTML = "";
-    tbody.innerHTML = "";
+  formEditar.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(formEditar);
+    const candidatoEditado = Object.fromEntries(formData.entries());
+  
+    candidatoEditado.party_id = parseInt(candidatoEditado.party_id);
+  
+    const partidoSelecionado = listaPartidos.find(p => Number(p.id) === Number(candidatoEditado.party_id));
+    candidatoEditado.party_number = partidoSelecionado ? partidoSelecionado.number : null;
+  
+    try {
+      const res = await fetch(`http://localhost:3000/api/candidate/${candidatoEditado.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(candidatoEditado)
+      });
+  
+      if (!res.ok) throw new Error("Erro ao atualizar candidato.");
+  
+      modalEditar.hide();
+      formEditar.reset();
+      await carregarCandidatos();
+    } catch (err) {
+      console.error("Erro ao atualizar candidato:", err);
+    }
+  });
+  
+  window.editarCandidato = function(id) {
+    const candidato = listaCandidatos.find(c => c.id === id);
+    if (!candidato) return;
+  
+    for (const key in candidato) {
+      const input = formEditar.elements[key];
+      if (input) {
+        input.value = candidato[key];
+      }
+    }
+  
+    if (candidato.party && candidato.party.id) {
+      selectPartidoEditar.value = candidato.party.id;
+    } else {
+      selectPartidoEditar.value = "";
+    }
+  
+    modalEditar.show();
+  };
 
-    if (!listaCandidatos.length) return;
+  window.excluirCandidato = async (id) => {
+    if (!confirm("Tem certeza que deseja excluir este candidato?")) return;
 
-    const chaves = Object.keys(listaCandidatos[0]);
-
-    const cabecalho = document.createElement("tr");
-    chaves.forEach((chave) => {
-      const th = document.createElement("th");
-      th.textContent = titulosColunas[chave] || chave;
-      cabecalho.appendChild(th);
-    });
-
-    const thAcoes = document.createElement("th");
-    thAcoes.textContent = "Ações";
-    cabecalho.appendChild(thAcoes);
-
-    thead.appendChild(cabecalho);
-
-    const inicio = (paginaAtual - 1) * itensPorPagina;
-    const candidatosPagina = listaCandidatos.slice(inicio, inicio + itensPorPagina);
-
-    candidatosPagina.forEach((candidato) => {
-      const linha = document.createElement("tr");
-
-      chaves.forEach((chave) => {
-        const td = document.createElement("td");
-        td.textContent = candidato[chave];
-        linha.appendChild(td);
+    try {
+      const res = await fetch(`http://localhost:3000/api/candidate/${id}`, {
+        method: "DELETE"
       });
 
-      const tdAcoes = document.createElement("td");
-      tdAcoes.innerHTML = `
-        <button class="btn-icon"><i class="bi bi-eye"></i></button>
-        <button class="btn-icon"><i class="bi bi-pencil"></i></button>
-        <button class="btn-icon"><i class="bi bi-trash"></i></button>
-      `;
-      linha.appendChild(tdAcoes);
+      if (!res.ok) throw new Error("Erro ao excluir candidato.");
 
-      tbody.appendChild(linha);
-    });
-  }
-
-  function atualizarPaginacao() {
-    if (!pagination) return;
-
-    pagination.innerHTML = "";
-    const totalPaginas = Math.ceil(listaCandidatos.length / itensPorPagina);
-
-    for (let i = 1; i <= totalPaginas; i++) {
-      const botao = document.createElement("button");
-      botao.textContent = i;
-      botao.classList.add("page-btn");
-      if (i === paginaAtual) botao.classList.add("active");
-
-      botao.addEventListener("click", () => {
-        paginaAtual = i;
-        atualizarTabela();
-        atualizarPaginacao();
-      });
-
-      pagination.appendChild(botao);
+      listaCandidatos = listaCandidatos.filter(c => c.id !== id);
+      renderizarTabela();
+    } catch (err) {
+      console.error("Erro ao excluir candidato:", err);
     }
-  }
+  };
 
-  carregarCandidatos();
+  carregarPartidos().then(carregarCandidatos);
 });
